@@ -7,9 +7,9 @@
 </head>
 <body>
     <h1>URL Analytics</h1>
-    <p>Original URL: {{ original_url }}</p>
-    <p>Shortened URL: <a href="{{ short_url }}">{{ short_url }}</a></p>
-    <p>Number of clicks: {{ num_clicks }}</p>
+    <p>Original URL: {{ url.long_url }}</p>
+    <p>Shortened URL: <a href="{{ url.short_url }}">{{ url.short_url }}</a></p>
+    <p>Number of clicks: {{ url.clicks }}</p>
     <p>Link history:</p>
     <ul>
         {% for link in link_history %}

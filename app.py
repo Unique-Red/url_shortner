@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
 import shortuuid
 import qrcode
@@ -7,6 +7,7 @@ import io
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SECRET_KEY"] = "OCML3BRawWEUeaxcuKHLpw"
 db = SQLAlchemy(app)
 
 class Url(db.Model):
@@ -39,17 +40,24 @@ def home():
         if custom_url:
             existing_url = Url.query.filter_by(custom_url=custom_url).first()
             if existing_url:
-                return render_template('home.html', error='Custom URL already taken.')
+                flash ('That custom URL already exists. Please try another one.', category='danger')
             short_url = custom_url
+        elif long_url[:4] != 'http':
+            long_url = 'http://' + long_url
         else:
             short_url = shortuuid.uuid()[:6]
         url = Url(long_url=long_url, short_url=short_url, custom_url=custom_url)
         db.session.add(url)
         db.session.commit()
-        return redirect('/')
+        return redirect(url_for('dashboard'))
 
     urls = Url.query.order_by(Url.created_at.desc()).limit(10).all()
     return render_template('index.html', urls=urls)
+
+@app.route("/dashboard")
+def dashboard():
+    urls = Url.query.order_by(Url.created_at.desc()).all()
+    return render_template('dashboard.html', urls=urls)
 
 @app.route('/<short_url>')
 def redirect_url(short_url):
