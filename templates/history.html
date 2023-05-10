@@ -7,7 +7,7 @@
 	<h1>url History</h1>
 	<ul>
 	{% for url in urls %}
-		<li><a href="{{ url_for('redirect_url', short_url=url.short_url) }}">{{ url.short_url }}</a> - {{ url.long_url }} - {{ url.created_at.strftime('%I:%M%p %B %d, %Y') }}</li>
+		<li><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">{{ url.short_url }}</a> - {{ url.long_url }} - {{ url.created_at.strftime('%I:%M%p %B %d, %Y') }}</li>
 	{% endfor %}
 	</ul>
 </body>

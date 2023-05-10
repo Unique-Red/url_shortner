@@ -8,7 +8,7 @@
 </head>
 <body>
     {% for url in urls %}
-    <li><a href="{{ url_for('redirect_url', short_url=url.short_url) }}">{{ url.short_url }}</a> - {{ url.long_url }} - {{ url.created_at.strftime('%I:%M%p %B %d, %Y') }} - {{url.clicks}}</li>
+    <li><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">{{ url.short_url }}</a> - {{ url.long_url }} - {{ url.created_at.strftime('%I:%M%p %B %d, %Y') }} - {{url.clicks}}</li>
     <p>Scan this QR Code:</p>
     <img src="{{url_for('generate_qr_code_url', short_url=url.short_url)}}" alt="QR Code">
     <br>
