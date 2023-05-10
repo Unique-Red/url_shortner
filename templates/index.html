@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+</head>
+<body>
+    <h1>URL Shortener</h1>
+    <form method="POST">
+        <label for="long_url">Long URL:</label>
+        <input type="text" name="long_url" id="long_url" required>
+        <br>
+        <label for="custom_url">Custom URL:</label>
+        <input type="text" name="custom_url" id="custom_url">
+        <br>
+        {% if error %}<p>{{ error }}</p>{% endif %}
+        <button type="submit">Shorten URL</button>
+
+        {% if short_url %}
+        <p>Shortened URL: <a href="{{ short_url }}">{{ short_url }}</a></p>
+        {% endif %}
+
+        {% if qrcode %}
+        <p>Scan this QR Code:</p>
+        <img src="{{ qrcode }}" alt="QR Code">
+        {% endif %}
+
+        {% if original_url %}
+        <p>Original URL: {{ original_url }}</p>
+        <p>Shortened URL: <a href="{{ short_url }}">{{ short_url }}</a></p>
+        <p>Number of clicks: {{ num_clicks }}</p>
+        <p>Link history:</p>
+        <ul>
+            {% for link in link_history %}
+            <li>{{ link }}</li>
+            {% endfor %}
+        </ul>
+
+        {% endif %}
+
+
+    </form>
+</body>
+</html>

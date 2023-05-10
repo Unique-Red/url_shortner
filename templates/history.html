@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Link History</title>
+</head>
+<body>
+	<h1>Link History</h1>
+	<ul>
+	{% for link in links %}
+		<li><a href="{{ url_for('redirect_url', short_url=link.short_url) }}">{{ link.short_url }}</a> - {{ link.original_url }} - {{ link.date_created }}</li>
+	{% endfor %}
+	</ul>
+</body>
+</html>

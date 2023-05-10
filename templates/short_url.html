@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shortened URL</title>
+</head>
+<body>
+    <h1>Shortened URL</h1>
+    <p>Your shortened URL is:</p>
+    <p><a href="{{url_for('redirect_to_url', short_url=short_url)}}">{{ short_url }}</a></p>
+    <p>Scan this QR Code:</p>
+    <img src="{{ qrcode }}" alt="QR Code">
+</body>
+</html>
