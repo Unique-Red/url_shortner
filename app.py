@@ -1,72 +1,88 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-import random
-import string
+from flask import Flask, request, redirect, render_template
+from flask_sqlalchemy import SQLAlchemy
+import shortuuid
 import qrcode
-from datetime import datetime
-from flask_caching import Cache
+import io
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "OCML3BRawWEUeaxcuKHLpw"
-cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 3000})
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
+class Url(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    long_url = db.Column(db.String(500))
+    short_url = db.Column(db.String(10), unique=True)
+    custom_url = db.Column(db.String(50), unique=True)
+    clicks = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
 
-link_history = {}
-urls = {}
+    def __repr__(self):
+        return '<Url %r>' % self.short_url
 
-@app.route('/', methods=['GET','POST'])
-@cache.cached(timeout=3000)
+# @app.before_first_request
+# def create_tables():
+#     db.create_all()
+
+def generate_qr_code(url):
+    img = qrcode.make(url)
+    img_io = io.BytesIO()
+    img.save(img_io, 'PNG')
+    img_io.seek(0)
+    return img_io
+
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    if request.method == "POST":
+    if request.method == 'POST':
         long_url = request.form['long_url']
         custom_url = request.form['custom_url']
-        if long_url[:4] != 'http':
-            long_url = 'http://' + long_url
-        elif custom_url in cache:
-            flash ('Custom URL already exists', category='error')
-        elif not custom_url:
-            custom_url = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
-        elif len(custom_url) < 6:
-            flash ('Custom URL must be at least 6 characters long', category='error')
-        short_url = custom_url
-        
+        if custom_url:
+            existing_url = Url.query.filter_by(custom_url=custom_url).first()
+            if existing_url:
+                return render_template('home.html', error='Custom URL already taken.')
+            short_url = custom_url
+        else:
+            short_url = shortuuid.uuid()[:6]
+        url = Url(long_url=long_url, short_url=short_url, custom_url=custom_url)
+        db.session.add(url)
+        db.session.commit()
+        return redirect('/')
 
-
-        with cache:
-            cache.set(short_url, long_url)
-        qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        qr.add_data(short_url)
-        qr.make(fit=True)
-        qr_img = qr.make_image(fill_color="black", back_color="white")
-        qr_img.save('static/' + custom_url + '.png')
-
-        return redirect (url_for('short_url', short_url=short_url))
-
-    return render_template('index.html')
-
-@app.route('/short_url/<string:short_url>')
-def short_url(short_url):
-    return render_template('short_url.html', short_url=short_url)
+    urls = Url.query.order_by(Url.created_at.desc()).limit(10).all()
+    return render_template('index.html', urls=urls)
 
 @app.route('/<short_url>')
-def redirect_to_url(short_url):
-    url = cache.get(short_url)
+def redirect_url(short_url):
+    url = Url.query.filter_by(short_url=short_url).first()
     if url:
-        now = datetime.now()
-        date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
-        if short_url in link_history:
-            link_history[short_url].append(date_time)
-        else:
-            link_history[short_url] = [date_time]
-        return redirect(url)
-    else:
-        return render_template('404.html')
+        url.clicks += 1
+        db.session.commit()
+        return redirect(url.long_url)
+    return 'URL not found.'
 
-@app.route('/analytics')
-def analytics():
-    return render_template('analytics.html', link_history=link_history)
+@app.route('/qr_code/<short_url>')
+def generate_qr_code_url(short_url):
+    url = Url.query.filter_by(short_url=short_url).first()
+    if url:
+        img_io = generate_qr_code(request.host_url + url.short_url)
+        return img_io.getvalue(), 200, {'Content-Type': 'image/png'}
+    return 'URL not found.'
+
+@app.route('/analytics/<short_url>')
+def url_analytics(short_url):
+    url = Url.query.filter_by(short_url=short_url).first()
+    if url:
+        return render_template('analytics.html', url=url)
+    return 'URL not found.'
+
+@app.route('/history')
+def link_history():
+    urls = Url.query.order_by(Url.created_at.desc()).all()
+    return render_template('history.html', urls=urls)
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 # from flask import Flask, render_template, request, redirect, url_for, flash
 # import random
