@@ -2,20 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Analytics</title>
+    <title>Login</title>
 </head>
 <body>
-    <h1>URL Analytics</h1>
-    <p>Original URL: {{ url.long_url }}</p>
-    <p>Shortened URL: <a href="{{ url.short_url }}" target="_blank">{{ url.short_url }}</a></p>
-    <p>Number of clicks: {{ url.clicks }}</p>
-    <p>Link history:</p>
-    <ul>
-        {% for link in link_history %}
-            <li>{{ link }}</li>
-        {% endfor %}
-    </ul>
+    <form method="post">
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" required>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+        <input type="submit" value="Login">
+    </form>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for message in messages %}

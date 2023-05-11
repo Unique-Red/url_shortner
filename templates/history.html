@@ -10,5 +10,12 @@
 		<li><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">{{ url.short_url }}</a> - {{ url.long_url }} - {{ url.created_at.strftime('%I:%M%p %B %d, %Y') }}</li>
 	{% endfor %}
 	</ul>
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			{% for message in messages %}
+				<strong style="color:red;">{{message}}</strong>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
 </body>
 </html>

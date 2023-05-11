@@ -3,11 +3,15 @@ from flask_sqlalchemy import SQLAlchemy
 import shortuuid
 import qrcode
 import io
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config["SECRET_KEY"] = "OCML3BRawWEUeaxcuKHLpw"
+app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY')
+
 db = SQLAlchemy(app)
 
 class Url(db.Model):
@@ -20,10 +24,74 @@ class Url(db.Model):
 
     def __repr__(self):
         return '<Url %r>' % self.short_url
+    
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100))
+    email = db.Column(db.String)
+    password = db.Column(db.String)
 
-# @app.before_first_request
-# def create_tables():
-#     db.create_all()
+
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email.lower()).first()
+        if user:
+            if check_password_hash(user.password, password):
+                login_user(user)
+                return redirect(url_for('dashboard'))
+            else:
+                flash('Password incorrect. Please try again.', 'danger')
+        else:
+            flash('Email does not exist.', 'danger')
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    if request.method == 'POST':
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        user = User.query.filter_by(email=email.lower()).first()
+        if user:
+            flash('Email already exists.', 'danger')
+        elif len(username) < 2:
+            flash('Username must be greater than 1 character.', 'danger')
+        elif len(password) < 6:
+            flash('Password must be at least 6 characters.', 'danger')
+        elif password != confirm_password:
+            flash('Passwords don\'t match.', 'danger')
+        else:
+            new_user = User(email=email.lower(), username=username, password=generate_password_hash(password, method='sha256'))
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user)
+            return redirect(url_for('dashboard'))
+    return render_template('signup.html')
+
 
 def generate_qr_code(url):
     img = qrcode.make(url)
@@ -40,7 +108,7 @@ def home():
         if custom_url:
             existing_url = Url.query.filter_by(custom_url=custom_url).first()
             if existing_url:
-                flash ('That custom URL already exists. Please try another one.', category='danger')
+                flash ('That custom URL already exists. Please try another one.', 'danger')
             short_url = custom_url
         elif long_url[:4] != 'http':
             long_url = 'http://' + long_url
@@ -55,11 +123,13 @@ def home():
     return render_template('index.html', urls=urls)
 
 @app.route("/dashboard")
+@login_required
 def dashboard():
     urls = Url.query.order_by(Url.created_at.desc()).all()
     return render_template('dashboard.html', urls=urls)
 
 @app.route('/<short_url>')
+@login_required
 def redirect_url(short_url):
     url = Url.query.filter_by(short_url=short_url).first()
     if url:
@@ -77,6 +147,7 @@ def generate_qr_code_url(short_url):
     return 'URL not found.'
 
 @app.route('/analytics/<short_url>')
+@login_required
 def url_analytics(short_url):
     url = Url.query.filter_by(short_url=short_url).first()
     if url:
@@ -84,56 +155,10 @@ def url_analytics(short_url):
     return 'URL not found.'
 
 @app.route('/history')
+@login_required
 def link_history():
     urls = Url.query.order_by(Url.created_at.desc()).all()
     return render_template('history.html', urls=urls)
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-# from flask import Flask, render_template, request, redirect, url_for, flash
-# import random
-# import string
-
-# app = Flask(__name__)
-
-# urls = {}
-
-# @app.route('/', methods=['GET', 'POST'])
-# def home():
-#     if request.method == 'POST':
-#         url = request.form['url']
-#         if url[:4] != 'http':
-#             url = 'http://' + url
-#         short_url = generate_short_url()
-#         urls[short_url] = url
-#         return redirect (url_for('url', short_url=short_url))
-#     return render_template('home.html')
-
-# @app.route('/url/<string:short_url>')
-# def url(short_url):
-#     return render_template('url.html', short_url=short_url)
-
-# @app.route('/<string:short_url>')
-# def redirect_to_url(short_url):
-#     original_url = urls.get(short_url)
-#     if original_url:
-#         return redirect(original_url)
-#     else:
-#         flash('That short URL does not exist!')
-#         return redirect(url_for('home'))
-    
-# def generate_short_url():
-#     characters = string.digits + string.ascii_letters
-#     while True:
-#         short_url = ''.join(random.choices(characters, k=3))
-#         if short_url not in urls:
-#             return short_url
-#         elif len(urls) == len(characters) ** 3:
-#             raise Exception("Cannot generate a short URL")
-#         else:
-#             return short_url
-        
-# if __name__ == '__main__':
-#     app.run(debug=True)
