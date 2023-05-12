@@ -18,7 +18,7 @@
         <input type="password" name="confirm_password" id="confirm_password" required>
         <input type="submit" value="Sign Up">
     </form>
-    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
                 <strong style="color:red;">{{message}}</strong>

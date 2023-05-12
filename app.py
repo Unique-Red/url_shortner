@@ -6,13 +6,21 @@ import io
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+from random import randint
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY')
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 465
+app.config["MAIL_USE_TLS"] =True
+app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 
 db = SQLAlchemy(app)
+mail = Mail(app)
 
 class Url(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,6 +38,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100))
     email = db.Column(db.String)
     password = db.Column(db.String)
+    confirmed = db.Column(db.Boolean, default=False)
 
 
 login_manager = LoginManager()
@@ -40,7 +49,20 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(user_id)
 
+otp = randint(000000,999999)
 
+@app.route('/validate/<email>', methods=['GET', 'POST'])
+def validate(email):
+    if request.method == 'POST':
+        otp_entered = request.form['otp']
+        if otp_entered == otp:
+            user = User.query.filter_by(email=email.lower()).first()
+            user.confirmed = True
+            db.session.commit()
+            return redirect(url_for('login'))
+        else:
+            flash('Incorrect OTP. Please try again.')
+    return render_template('validate.html', email=email)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -55,9 +77,9 @@ def login():
                 login_user(user)
                 return redirect(url_for('dashboard'))
             else:
-                flash('Password incorrect. Please try again.', 'danger')
+                flash('Password incorrect. Please try again.')
         else:
-            flash('Email does not exist.', 'danger')
+            flash('Email is not registered yet.')
     return render_template('login.html')
 
 @app.route('/logout')
@@ -77,19 +99,28 @@ def signup():
         confirm_password = request.form['confirm_password']
         user = User.query.filter_by(email=email.lower()).first()
         if user:
-            flash('Email already exists.', 'danger')
+            flash('Email already exists.')
         elif len(username) < 2:
-            flash('Username must be greater than 1 character.', 'danger')
+            flash('Username must be greater than 1 character.')
         elif len(password) < 6:
-            flash('Password must be at least 6 characters.', 'danger')
+            flash('Password must be at least 6 characters.')
         elif password != confirm_password:
-            flash('Passwords don\'t match.', 'danger')
+            flash('Passwords don\'t match.')
         else:
             new_user = User(email=email.lower(), username=username, password=generate_password_hash(password, method='sha256'))
+
+            try:
+                msg = Message('Email Verification', sender="noah13victor@gmail.com", recipients=[email])
+                msg.html = render_template('otp.html', otp=otp)
+                mail.send(msg)
+            except:
+                flash ("Verification failed. Please try again.")
+                return redirect(url_for('signup'))
+
             db.session.add(new_user)
             db.session.commit()
-            login_user(new_user)
-            return redirect(url_for('dashboard'))
+            flash('Account created successfully. Please check your email for verification.')
+            return redirect(url_for('validate', email=email.lower()))
     return render_template('signup.html')
 
 
@@ -108,7 +139,7 @@ def home():
         if custom_url:
             existing_url = Url.query.filter_by(custom_url=custom_url).first()
             if existing_url:
-                flash ('That custom URL already exists. Please try another one.', 'danger')
+                flash ('That custom URL already exists. Please try another one.')
             short_url = custom_url
         elif long_url[:4] != 'http':
             long_url = 'http://' + long_url

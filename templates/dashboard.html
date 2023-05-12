@@ -7,13 +7,25 @@
     <title>URL Shortner</title>
 </head>
 <body>
-    {% for url in urls %}
-    <li><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">{{ url.short_url }}</a> - {{ url.long_url }} - {{ url.created_at.strftime('%I:%M%p %B %d, %Y') }} - {{url.clicks}}</li>
-    <p>Scan this QR Code:</p>
-    <img src="{{url_for('generate_qr_code_url', short_url=url.short_url)}}" alt="QR Code">
-    <br>
-    <hr>
-    {% endfor %}
+    {% if current_user.is_authenticated %}
+    <h1>Welcome {{ current_user.username }}</h1>
+        {% if urls %}
+        <small>Here are your URLS</small>
+        <br/>
+        <br/>
+            {% for url in urls %}
+            <li><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">{{ url.short_url }}</a> - {{ url.long_url }} - {{ url.created_at.strftime('%I:%M%p %B %d, %Y') }} - {{url.clicks}}</li>
+            <p>Scan this QR Code:</p>
+            <img src="{{url_for('generate_qr_code_url', short_url=url.short_url)}}" alt="QR Code">
+            <br>
+            <hr>
+            {% endfor %}
+        {% else %}
+            <h1>You do not have any urls yet. <a href="{{url_for('home')}}">Click to Create</a> </h1>
+        {% endif %}
+    {% else %}
+    <h1>Please login to see your urls</h1>
+    {% endif %}
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for message in messages %}

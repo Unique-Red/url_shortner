@@ -6,22 +6,31 @@
     <title>URL Shortener</title>
 </head>
 <body>
-    <h1>URL Shortener</h1>
-    <form method="POST">
-        <label for="long_url">Long URL:</label>
-        <input type="text" name="long_url" id="long_url" required>
-        <br>
-        <label for="custom_url">Custom URL:</label>
-        <input type="text" name="custom_url" id="custom_url">
-        <br>
-        <button type="submit">Shorten URL</button>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for message in messages %}
-                    <strong style="color:red;">{{message}}</strong>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </form>
+    {% if current_user.is_authenticated %}
+        <a href="{{url_for('logout')}}">Logout</a>
+        <h1>URL Shortener</h1>
+        <form method="POST">
+            <label for="long_url">Long URL:</label>
+            <input type="text" name="long_url" id="long_url" required>
+            <br>
+            <label for="custom_url">Custom URL:</label>
+            <input type="text" name="custom_url" id="custom_url">
+            <br>
+            <button type="submit">Shorten URL</button>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <strong style="color:red;">{{message}}</strong>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </form>
+    {% else %}
+        <a href="{{url_for('login')}}">Login</a>
+        <a href="{{url_for('signup')}}">Signup</a>
+
+        <h1>URL Shortener</h1>
+        <p>Login to shorten url</p>
+    {% endif %}
 </body>
 </html>

@@ -4,20 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Email validation</title>
 </head>
 <body>
     <form method="post">
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" required>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
-        <input type="submit" value="Login">
+        <input type="number" name="otp" placeholder="enter otp">
+        <button type="submit">Submit</button>
     </form>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-                <strong style="color:red;">{{ message }}</strong>
+                <strong style="color:red;">{{message}}</strong>
             {% endfor %}
         {% endif %}
     {% endwith %}
