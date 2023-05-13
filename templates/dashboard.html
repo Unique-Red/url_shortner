@@ -1,24 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Shortner</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="hero">
     {% if current_user.is_authenticated %}
-    <h1>Welcome {{ current_user.username }}</h1>
         {% if urls %}
-        <small>Here are your URLS</small>
+        <h1>{{ current_user.username }}, Here are your URLS</h1>
         <br/>
         <br/>
             {% for url in urls %}
-            <li><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">{{ url.short_url }}</a> - {{ url.long_url }} - {{ url.created_at.strftime('%I:%M%p %B %d, %Y') }} - {{url.clicks}}</li>
-            <p>Scan this QR Code:</p>
-            <img src="{{url_for('generate_qr_code_url', short_url=url.short_url)}}" alt="QR Code">
-            <br>
-            <hr>
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="{{url_for('generate_qr_code_url', short_url=url.short_url)}}" alt="QR Code">
+                <div class="card-body">
+                  <h5 class="card-title">Link Clicks: {{url.clicks}} <br>Created: {{ url.created_at.strftime('%B %d, %Y') }}</h5>
+                  <p class="card-text">{{ url.long_url }}</p>
+                  <p>Shortened Link: <a href="{{ url_for('redirect_url', short_url=url.short_url) }}" style="color: aliceblue; text-decoration: underline;" target="_blank">{{ url_for('redirect_url', short_url=url.short_url) }}</a></p>
+                  
+                </div>
+              </div>
             {% endfor %}
         {% else %}
             <h1>You do not have any urls yet. <a href="{{url_for('home')}}">Click to Create</a> </h1>
@@ -33,5 +31,6 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
-</body>
-</html>
+</section>
+    
+{% endblock %}

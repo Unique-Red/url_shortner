@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedRoute - {% block title%}{% endblock %}</title>
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/icon.png')}}" type="image/x-icon">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <!--boxicons-->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Itim&family=Poppins:ital,wght@0,400;0,500;0,900;1,100;1,700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <header>
+        <a href="{{url_for('home')}}" class="logo"></a>
+        <ul class="navlist">
+            <li><a href="{{url_for('home')}}">Home</a></li>
+            <li><a href="#">About</a></li>
+            {% if current_user.is_authenticated %}
+            <li><a href="{{url_for('dashboard')}}">Dashboard</a></li>
+            <li><a href="{{url_for('logout')}}">Logout</a></li>
+            {% else %}
+            <li><a href="{{url_login}}">Login</a></li>
+            {% endif %}
+        </ul>
+        <div class="bx bx-menu" id="menu-icon"></div>
+
+    </header>
+    <div class="container">
+        {% block content%}{% endblock %}
+    </div>
+    <script src="{{url_for('static', filename='js/main.js')}}"></script>
+</body>
+</html>

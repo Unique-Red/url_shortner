@@ -1,36 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Shortener</title>
-</head>
-<body>
-    {% if current_user.is_authenticated %}
-        <a href="{{url_for('logout')}}">Logout</a>
-        <h1>URL Shortener</h1>
-        <form method="POST">
-            <label for="long_url">Long URL:</label>
-            <input type="text" name="long_url" id="long_url" required>
-            <br>
-            <label for="custom_url">Custom URL:</label>
-            <input type="text" name="custom_url" id="custom_url">
-            <br>
-            <button type="submit">Shorten URL</button>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <strong style="color:red;">{{message}}</strong>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </form>
-    {% else %}
-        <a href="{{url_for('login')}}">Login</a>
-        <a href="{{url_for('signup')}}">Signup</a>
+{% extends 'base.html' %}
+{% block title %}URL Shortener{% endblock %}
+{% block content %}
 
-        <h1>URL Shortener</h1>
-        <p>Login to shorten url</p>
-    {% endif %}
-</body>
-</html>
+<section class="hero">
+    <div class="hero-text">
+        {% if current_user.is_authenticated %}
+        <h3>Hello {{current_user.username}}</h3>
+        <div class="url-form">
+            <form method="POST">
+                <input type="text" name="long_url" id="long_url" placeholder="Enter long URL" required>
+                <input type="text" name="custom_url" id="custom_url" placeholder="Enter custom URL (optional)">
+                <br>
+                <button type="submit">Shorten URL</button>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <strong style="color:gray;">{{message}}</strong>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </form>
+        </div>
+        {% else %}
+        <h5>Welcome to</h5>
+        <h1>RedRoute</h1>
+        <h4>Shorten. Share. Succeed.</h4>
+        <p>Shortening URLs, Analytics and Customization.</p>
+        <a href="{{url_for('signup')}}">Sign up to get started</a>
+        {% endif %}
+    </div>
+    <div class="hero-img">
+        <img src="{{url_for('static', filename='images/home.png')}}" alt="RedRoute">
+
+    </div>
+</section>
+
+<div class="icons">
+    <a href="#"><i class="ri-instagram-line"></i></a>
+    <a href="#"><i class="ri-facebook-fill"></i></a>
+    <a href="#"><i class="ri-whatsapp-line"></i></a>
+</div>
+
+<div class="scroll-down">
+    <a href="tel:+0123456789"><i class="ri-phone-line"></i></a>
+</div>
+{% endblock %}
