@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedRoute - {% block title %}{% endblock %}</title>
+    <link rel="icon" href="https://res.cloudinary.com/di3bnxzob/image/upload/v1683491900/20230507_151847_fetqqm.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/auth.css')}}">
+</head>
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+
+                {% block content %}{% endblock %}
+                
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <strong style="color:red;">{{ message }}</strong>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </section>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
