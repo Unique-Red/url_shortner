@@ -67,7 +67,7 @@ def validate(email):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('home'))
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -75,7 +75,7 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 login_user(user)
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('home'))
             else:
                 flash('Password incorrect. Please try again.')
         else:
@@ -91,7 +91,7 @@ def logout():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('home'))
     if request.method == 'POST':
         email = request.form['email']
         username = request.form['username']
