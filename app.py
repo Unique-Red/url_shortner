@@ -8,6 +8,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from random import randint
 from flask_mail import Mail, Message
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
@@ -26,7 +29,7 @@ class Url(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     long_url = db.Column(db.String(500))
     short_url = db.Column(db.String(10), unique=True)
-    custom_url = db.Column(db.String(50), unique=True)
+    custom_url = db.Column(db.String(50), unique=True, default=None)
     clicks = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
@@ -49,7 +52,7 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(user_id)
 
-otp = randint(000000,999999)
+otp = randint(100000,999999)
 
 @app.route('/validate/<email>', methods=['GET', 'POST'])
 def validate(email):
@@ -111,7 +114,7 @@ def signup():
 
             try:
                 msg = Message('Email Verification', sender="noah13victor@gmail.com", recipients=[email])
-                msg.html = render_template('otp.html', otp=otp)
+                msg.html = render_template('otp.html', otp=str(otp))
                 mail.send(msg)
             except:
                 flash ("Verification failed. Please try again.")
