@@ -112,13 +112,13 @@ def signup():
         else:
             new_user = User(email=email.lower(), username=username, password=generate_password_hash(password, method='sha256'))
 
-            try:
-                msg = Message('Email Verification', sender="noah13victor@gmail.com", recipients=[email])
-                msg.html = render_template('otp.html', otp=str(otp))
-                mail.send(msg)
-            except:
-                flash ("Verification failed. Please try again.")
-                return redirect(url_for('signup'))
+            # try:
+            #     msg = Message('Email Verification', sender="noah13victor@gmail.com", recipients=[email])
+            #     msg.html = render_template('otp.html', otp=str(otp))
+            #     mail.send(msg)
+            # except:
+            #     flash ("Verification failed. Please try again.")
+            #     return redirect(url_for('signup'))
 
             db.session.add(new_user)
             db.session.commit()
