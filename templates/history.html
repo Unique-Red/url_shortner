@@ -1,21 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>url History</title>
-</head>
-<body>
-	<h1>url History</h1>
-	<ul>
-	{% for url in urls %}
-		<li><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">{{ url.short_url }}</a> - {{ url.long_url }} - {{ url.created_at.strftime('%I:%M%p %B %d, %Y') }}</li>
-	{% endfor %}
-	</ul>
-	{% with messages = get_flashed_messages(with_categories=true) %}
-		{% if messages %}
-			{% for message in messages %}
-				<strong style="color:red;">{{message}}</strong>
-			{% endfor %}
-		{% endif %}
-	{% endwith %}
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}URL History{% endblock %}
+{% block content %}
+<style>
+table {
+  border-collapse: collapse;
+  width: 500px;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+th {
+  background-color: lightgray;
+}
+a{
+	color: #fff;
+}
+.form-box{
+	height: auto;
+	width: auto;
+	border-radius: 0;
+}
+</style>
+  <table>
+	<thead>
+		<tr>
+		  <th>Short URL</th>
+		  <th>Long URL</th>
+		  <th>Date Created</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for url in urls %}
+		<tr>
+		<td><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">{{ url.short_url }}</a></td>
+		<td>{{ url.long_url }}</td>
+		<td>{{ url.created_at.strftime('%I:%M%p %B %d, %Y') }}</td>
+		</tr>
+		{% endfor %}
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for message in messages %}
+					<strong style="color:red;">{{message}}</strong>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+	</tbody>
+  </table> 
+{% endblock %}
