@@ -23,11 +23,12 @@ MarkupSafe==2.1.2
 multidict==6.0.4
 pypng==0.20220715.0
 pyshortner==0.0.4
+python-dotenv==1.0.0
 qrcode==7.4.2
 redis==4.5.5
 shortuuid==1.0.11
 shortzyy==0.0.6
 SQLAlchemy==2.0.12
 typing_extensions==4.5.0
-Werkzeug==2.3.4
+Werkzeug==2.2.3
 yarl==1.9.2
