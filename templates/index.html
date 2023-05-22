@@ -37,11 +37,12 @@
 
 <div class="icons">
     <a href="#"><i class="ri-instagram-line"></i></a>
-    <a href="#"><i class="ri-twitter-fill"></i></a>
-    <a href="#"><i class="ri-whatsapp-line"></i></a>
+    <a href="#"><i class="ri-twitter-line"></i></a>
+    <a href="#"><i class="ri-linkedin-line"></i></a>
 </div>
 
 <div class="scroll-down">
-    <a href="tel:+0123456789"><i class="ri-phone-line"></i></a>
+    {{share.load()}}
+    <a>{{share.create(sites='twitter')}}</a>    
 </div>
 {% endblock %}
