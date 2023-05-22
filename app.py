@@ -9,6 +9,7 @@ import os
 from random import randint
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
+from flask_share import Share
 
 load_dotenv()
 
@@ -24,6 +25,7 @@ app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 
 db = SQLAlchemy(app)
 mail = Mail(app)
+share = Share(app)
 
 class Url(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,18 +56,18 @@ def load_user(user_id):
 
 otp = randint(100000,999999)
 
-@app.route('/validate/<email>', methods=['GET', 'POST'])
-def validate(email):
-    if request.method == 'POST':
-        otp_entered = request.form['otp']
-        if otp_entered == otp:
-            user = User.query.filter_by(email=email.lower()).first()
-            user.confirmed = True
-            db.session.commit()
-            return redirect(url_for('login'))
-        else:
-            flash('Incorrect OTP. Please try again.')
-    return render_template('validate.html', email=email)
+# @app.route('/validate/<email>', methods=['GET', 'POST'])
+# def validate(email):
+#     if request.method == 'POST':
+#         otp_entered = request.form['otp']
+#         if otp_entered == otp:
+#             user = User.query.filter_by(email=email.lower()).first()
+#             user.confirmed = True
+#             db.session.commit()
+#             return redirect(url_for('login'))
+#         else:
+#             flash('Incorrect OTP. Please try again.')
+#     return render_template('validate.html', email=email)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -193,6 +195,108 @@ def url_analytics(short_url):
 def link_history():
     urls = Url.query.order_by(Url.created_at.desc()).all()
     return render_template('history.html', urls=urls)
+
+@app.route('/delete/<short_url>')
+@login_required
+def delete_url(short_url):
+    url = Url.query.filter_by(short_url=short_url).first()
+    if url:
+        db.session.delete(url)
+        db.session.commit()
+        return redirect(url_for('dashboard'))
+    return 'URL not found.'
+
+@app.route('/edit/<short_url>', methods=['GET', 'POST'])
+@login_required
+def edit_url(short_url):
+    url = Url.query.filter_by(short_url=short_url).first()
+    if url:
+        if request.method == 'POST':
+            long_url = request.form['long_url']
+            custom_url = request.form['custom_url']
+            if custom_url:
+                existing_url = Url.query.filter_by(custom_url=custom_url).first()
+                if existing_url:
+                    flash ('That custom URL already exists. Please try another one.')
+                url.custom_url = custom_url
+            elif long_url[:4] != 'http':
+                long_url = 'http://' + long_url
+            url.long_url = long_url
+            db.session.commit()
+            return redirect(url_for('dashboard'))
+        return render_template('edit.html', url=url)
+    return 'URL not found.'
+
+
+@app.route('/validate/<email>', methods=['GET', 'POST'])
+def validate(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        if request.method == 'POST':
+            otp = request.form['otp']
+            if otp == str(otp):
+                user.verified = True
+                db.session.commit()
+                flash('Email verified successfully. Please login.')
+                return redirect(url_for('login'))
+            else:
+                flash('Invalid OTP. Please try again.')
+                return redirect(url_for('validate', email=email))
+        return render_template('otp.html', email=email)
+    return 'Email not found.'
+
+@app.route('/resend/<email>')
+def resend(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        try:
+            msg = Message('Email Verification', sender="noah13victor@gmail.com", recipients=[email])
+            msg.html = render_template('otp.html', otp=str(otp))
+            mail.send(msg)
+        except:
+            flash ("Verification failed. Please try again.")
+            return redirect(url_for('signup'))
+        flash('OTP sent successfully. Please check your email.')
+        return redirect(url_for('validate', email=email))
+    return 'Email not found.'
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        user = User.query.filter_by(email=email.lower()).first()
+        if user:
+            try:
+                msg = Message('Reset Password', sender="noah13victor@gmail.com", recipients=[email])
+                msg.html = render_template('reset_password.html', email=email)
+                mail.send(msg)
+            except:
+                flash ("Reset password failed. Please try again.")
+                return redirect(url_for('login'))
+            flash('Reset password link sent successfully. Please check your email.')
+            return redirect(url_for('login'))
+        flash('Email not found.')
+        return redirect(url_for('forgot_password'))
+    return render_template('forgot_password.html')
+
+@app.route('/reset_password/<email>', methods=['GET', 'POST'])
+def reset_password(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        if request.method == 'POST':
+            password = request.form['password']
+            confirm_password = request.form['confirm_password']
+            if password == confirm_password:
+                user.password = generate_password_hash(password, method='sha256')
+                db.session.commit()
+                flash('Password reset successfully. Please login.')
+                return redirect(url_for('login'))
+            else:
+                flash('Passwords do not match. Please try again.')
+                return redirect(url_for('reset_password', email=email))
+        return render_template('reset_password.html', email=email)
+    return 'Email not found.'
+
 
 if __name__ == '__main__':
     app.run(debug=True)
