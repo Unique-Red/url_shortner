@@ -21,6 +21,7 @@ itsdangerous==2.1.2
 Jinja2==3.1.2
 MarkupSafe==2.1.2
 multidict==6.0.4
+psycopg2==2.9.6
 pypng==0.20220715.0
 pyshortner==0.0.4
 python-dotenv==0.21.1
