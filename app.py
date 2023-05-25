@@ -14,8 +14,8 @@ from flask_share import Share
 load_dotenv()
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY')
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
@@ -56,19 +56,6 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 otp = randint(100000,999999)
-
-# @app.route('/validate/<email>', methods=['GET', 'POST'])
-# def validate(email):
-#     if request.method == 'POST':
-#         otp_entered = request.form['otp']
-#         if otp_entered == otp:
-#             user = User.query.filter_by(email=email.lower()).first()
-#             user.confirmed = True
-#             db.session.commit()
-#             return redirect(url_for('login'))
-#         else:
-#             flash('Incorrect OTP. Please try again.')
-#     return render_template('validate.html', email=email)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -115,13 +102,13 @@ def signup():
         else:
             new_user = User(email=email.lower(), username=username, password=generate_password_hash(password, method='sha256'))
 
-            # try:
-            #     msg = Message('Email Verification', sender="noah13victor@gmail.com", recipients=[email])
-            #     msg.html = render_template('otp.html', otp=str(otp))
-            #     mail.send(msg)
-            # except:
-            #     flash ("Verification failed. Please try again.")
-            #     return redirect(url_for('signup'))
+            try:
+                msg = Message(subject='Email Verification', sender="noah13victor@gmail.com", recipients=[email])
+                msg.html = render_template('otp.html', otp=str(otp))
+                mail.send(msg)
+            except:
+                flash ("Verification failed. Please try again.")
+                return redirect(url_for('signup'))
 
             db.session.add(new_user)
             db.session.commit()
@@ -235,16 +222,19 @@ def validate(email):
     if user:
         if request.method == 'POST':
             otp = request.form['otp']
-            if otp == str(otp):
-                user.verified = True
-                db.session.commit()
-                flash('Email verified successfully. Please login.')
-                return redirect(url_for('login'))
-            else:
-                flash('Invalid OTP. Please try again.')
+            if not otp:
+                flash('Please enter OTP.')
                 return redirect(url_for('validate', email=email))
-        return render_template('otp.html', email=email)
+            if otp == str(otp):
+                user.confirmed = True
+                db.session.commit()
+                flash('Email verified successfully.')
+                return redirect(url_for('login'))
+            flash('Invalid OTP.')
+            return redirect(url_for('validate', email=email))
+        return render_template('validate.html', email=email)
     return 'Email not found.'
+
 
 @app.route('/resend/<email>')
 def resend(email):
