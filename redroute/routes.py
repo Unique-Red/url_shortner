@@ -81,6 +81,7 @@ def generate_qr_code(url):
     img_io.seek(0)
     return img_io
 
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
