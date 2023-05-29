@@ -8,6 +8,8 @@
 		  <th>Short URL</th>
 		  <th>Long URL</th>
 		  <th>Date Created</th>
+		  <th>Edit</th>
+		  <th>Delete</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -16,6 +18,8 @@
 		<td><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">{{ url_for('redirect_url', short_url=url.short_url) }}</a></td>
 		<td>{{ url.long_url }}</td>
 		<td>{{ url.created_at.strftime('%I:%M%p %B %d, %Y') }}</td>
+		<td><a href="{{ url_for('edit_url', id=url.id) }}">Edit</a></td>
+		<td><a href="{{ url_for('delete', id=url.id) }}">Delete</a></td>
 		</tr>
 		{% endfor %}
 		{% with messages = get_flashed_messages(with_categories=true) %}
