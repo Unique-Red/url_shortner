@@ -59,8 +59,8 @@ def signup():
             new_user = User(email=email.lower(), username=username, password=generate_password_hash(password, method='sha256'))
 
             try:
-                msg = Message("Email Verification", sender="noah13victor@gmail.com", recipients=[email])
-                msg.html = render_template('otp.html', otp=str(otp))
+                msg = Message("RedRoute Email Verification", sender="no-replySut@gmail.com", recipients=[email])
+                msg.html = render_template('otp.html', otp=str(otp), username=username)
                 mail.send(msg)
             except Exception as e:
                 print(e)
@@ -90,7 +90,8 @@ def home():
         if custom_url:
             existing_url = Url.query.filter_by(custom_url=custom_url).first()
             if existing_url:
-                flash ('That custom URL already exists. Please try another one.')
+                flash ('That custom URL already exists. Please try another one!')
+                return redirect(url_for('home'))
             short_url = custom_url
         elif long_url[:4] != 'http':
             long_url = 'http://' + long_url
