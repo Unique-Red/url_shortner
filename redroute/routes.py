@@ -59,7 +59,7 @@ def signup():
             new_user = User(email=email.lower(), username=username, password=generate_password_hash(password, method='sha256'))
 
             try:
-                msg = Message("RedRoute Email Verification", sender="no-replySut@gmail.com", recipients=[email])
+                msg = Message("RedRoute Email Verification", sender="noreply@gmail.com", recipients=[email])
                 msg.html = render_template('otp.html', otp=str(otp), username=username)
                 mail.send(msg)
             except Exception as e:
@@ -143,32 +143,30 @@ def link_history():
     urls = Url.query.order_by(Url.created_at.desc()).all()
     return render_template('history.html', urls=urls)
 
-@app.route('/delete/<short_url>')
+@app.route('/delete/<int:id>')
 @login_required
-def delete_url(short_url):
-    url = Url.query.filter_by(short_url=short_url).first()
+def delete(id):
+    url = Url.query.get_or_404(id)
     if url:
         db.session.delete(url)
         db.session.commit()
         return redirect(url_for('dashboard'))
     return 'URL not found.'
 
-@app.route('/edit/<short_url>', methods=['GET', 'POST'])
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_url(short_url):
-    url = Url.query.filter_by(short_url=short_url).first()
+def edit_url(id):
+    url = Url.query.get_or_404(id)
     if url:
         if request.method == 'POST':
-            long_url = request.form['long_url']
             custom_url = request.form['custom_url']
             if custom_url:
                 existing_url = Url.query.filter_by(custom_url=custom_url).first()
                 if existing_url:
                     flash ('That custom URL already exists. Please try another one.')
+                    return redirect(url_for('edit_url', id=id))
                 url.custom_url = custom_url
-            elif long_url[:4] != 'http':
-                long_url = 'http://' + long_url
-            url.long_url = long_url
+                url.short_url = custom_url
             db.session.commit()
             return redirect(url_for('dashboard'))
         return render_template('edit.html', url=url)

@@ -1,0 +1,16 @@
+{% extends 'auth.html' %}
+{% block title %}Edit URL{% endblock %}
+{% block content %}
+
+<form method="post">
+    <h2>Edit URL</h2>
+    <div class="inputbox">
+        <input type="text" name="long_url" value="{{url.long_url}}" disabled>
+    </div>
+    <div class="inputbox">
+        <ion-icon name="create-outline"></ion-icon>
+        <input type="text" name="custom_url" value="{{ url_for('redirect_url', short_url=url.short_url) }}" required>
+    </div>
+    <button type="submit">Submit changes</button>
+</form>
+{% endblock %}
