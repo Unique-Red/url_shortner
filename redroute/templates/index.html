@@ -12,7 +12,7 @@
                 <input type="text" name="custom_url" id="custom_url" placeholder="Enter custom URL (optional)">
                 <br>
                 <button type="submit">Shorten URL</button>
-                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         {% for message in messages %}
                             <strong style="color:gray;">{{message}}</strong>
