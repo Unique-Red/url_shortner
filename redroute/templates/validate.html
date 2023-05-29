@@ -1,22 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email validation</title>
-</head>
-<body>
+{% extends "auth.html" %}
+{% block title %}Email validation{% endblock %}
+{% block content %}
     <form method="post">
-        <input type="number" name="otp" placeholder="enter otp">
-        <button type="submit">Submit</button>
+        <h2>Email validation</h2>
+        <div class="inputbox">
+            <ion-icon name="pin-outline"></ion-icon>
+            <input type="number" name="otp" required>
+            <label for="">OTP</label>
+        </div>
+        <button type="submit">Confirm</button>
     </form>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <strong style="color:red;">{{message}}</strong>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-</body>
-</html>
+{% endblock %}

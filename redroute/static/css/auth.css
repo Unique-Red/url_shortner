@@ -98,6 +98,10 @@ button{
     font-size: 1em;
     font-weight: 600;
 }
+button:hover{
+    background: #000;
+    color: red;
+}
 .register{
     font-size: .9em;
     color: #fff;
