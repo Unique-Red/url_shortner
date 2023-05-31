@@ -5,7 +5,7 @@
 <section class="hero">
     <div class="hero-text">
         {% if current_user.is_authenticated %}
-        <h3>Hello {{current_user.username|capitalize}}</h3>
+        <h3 style="padding-bottom: 5px;">Hello {{current_user.username|capitalize}}</h3>
         <div class="url-form">
             <form method="POST">
                 <input type="text" name="long_url" id="long_url" placeholder="https://example.com/my-long-url" required>
