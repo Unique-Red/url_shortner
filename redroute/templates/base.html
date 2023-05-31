@@ -54,11 +54,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="#ff0000">
 </head>
 <body>
-    <header>
+    <header class="nav-el">
         <a href="{{url_for('home')}}" class="logo"></a>
         <ul class="navlist">
             <li><a href="{{url_for('home')}}">Home</a></li>
-            <li><a href="#">About</a></li>
+            <li><a href="{{url_for('about')}}">About</a></li>
             {% if current_user.is_authenticated %}
             <li><a href="{{url_for('dashboard')}}">Dashboard</a></li>
             <li><a href="{{url_for('link_history')}}">History</a></li>
