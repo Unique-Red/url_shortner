@@ -111,6 +111,10 @@ def dashboard():
     urls = Url.query.order_by(Url.created_at.desc()).all()
     return render_template('dashboard.html', urls=urls)
 
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
 @app.route('/<short_url>')
 @login_required
 def redirect_url(short_url):
