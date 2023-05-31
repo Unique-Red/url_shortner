@@ -4,7 +4,7 @@
 <section class="hero">
     {% if current_user.is_authenticated %}
         {% if urls %}
-        <h1>{{ current_user.username }}, Here are your URLS</h1>
+        <h1>{{ current_user.username|capitalize }}, Here are your URLS</h1>
         <br/>
         <br/>
             {% for url in urls %}
