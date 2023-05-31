@@ -5,7 +5,7 @@
 <section class="hero">
     <div class="hero-text">
         {% if current_user.is_authenticated %}
-        <h3>Hello {{current_user.username}}</h3>
+        <h3>Hello {{current_user.username|capitalize}}</h3>
         <div class="url-form">
             <form method="POST">
                 <input type="text" name="long_url" id="long_url" placeholder="https://example.com/my-long-url" required>
@@ -36,9 +36,8 @@
 </section>
 
 <div class="icons">
-    <a href="#"><i class="ri-instagram-line"></i></a>
-    <a href="#"><i class="ri-twitter-line"></i></a>
-    <a href="#"><i class="ri-linkedin-line"></i></a>
+    <a href="https://twitter.com/RedX_13" target="_blank"><i class="ri-twitter-line"></i></a>
+    <a href="https://www.linkedin.com/in/noah-useghan-44b37b221/" target="_blank"><i class="ri-linkedin-line"></i></a>
 </div>
 
 <div class="scroll-down">
