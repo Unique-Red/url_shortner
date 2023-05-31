@@ -86,7 +86,7 @@ def generate_qr_code(url):
 def home():
     if request.method == 'POST':
         long_url = request.form['long_url']
-        custom_url = request.form['custom_url']
+        custom_url = request.form['custom_url'] or None
         if custom_url:
             existing_url = Url.query.filter_by(custom_url=custom_url).first()
             if existing_url:
