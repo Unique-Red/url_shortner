@@ -235,6 +235,11 @@ input, button{
     /* margin: 10px; */
 }
 
+form input, form button{
+    padding: 10px 15px;
+    margin: 10px;
+}
+
 input:focus{
     border-color: red;
 }

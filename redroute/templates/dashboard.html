@@ -5,8 +5,6 @@
     {% if current_user.is_authenticated %}
         {% if urls %}
         <h1>{{ current_user.username|capitalize }}, Here are your URLS</h1>
-        <br/>
-        <br/>
             {% for url in urls %}
             <div class="card" style="width: 18rem;">
                 <img class="card-img-top" src="{{url_for('generate_qr_code_url', short_url=url.short_url)}}" alt="QR Code">
