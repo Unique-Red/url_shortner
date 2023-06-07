@@ -13,9 +13,9 @@
                 <div class="card-body">
                   <h5 class="card-title">Link Clicks: {{url.clicks}} <br>Created: {{ url.created_at.strftime('%B %d, %Y') }}</h5>
                   <p class="card-text">{{ url.long_url }}</p>
-                  <p>Shortened Link: 
+                  <p>Shortened Link: <br>
                     <a href="{{ url_for('redirect_url', short_url=url.short_url) }}" style="color: aliceblue; text-decoration: underline;" target="_blank">
-                    <input type="text" value="{{ url_for('redirect_url', short_url=url.short_url) }}" id="myInput" style="background: none; border: none; cursor: pointer; color: #fff; text-decoration: underline;" disabled>
+                    <input type="text" value="redroute.onrender.com/{{url.short_url}}" id="myInput" style="background: none; border: none; cursor: pointer; color: #fff; text-decoration: underline;" disabled>
                     </a>
                     </p>
                   <button onclick="myFunction()">Copy Link</button>
