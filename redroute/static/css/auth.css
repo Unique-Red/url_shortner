@@ -17,7 +17,7 @@ section{
 .form-box{
     position: relative;
     width: 400px;
-    height: 450px;
+    /* height: 450px; */
     background: transparent;
     border: 2px solid rgba(255,255,255,0.5);
     border-radius: 20px;
@@ -31,6 +31,7 @@ h2{
     font-size: 2em;
     color: #fff;
     text-align: center;
+    padding-top: 20px;
 }
 .inputbox{
     position: relative;
@@ -75,10 +76,8 @@ top: -5px;
     display: flex;
     justify-content: space-between;  
 }
-
 .forget label input{
     margin-right: 3px;
-    
 }
 .forget label a{
     color: #fff;
@@ -100,7 +99,7 @@ button{
 }
 button:hover{
     background: #000;
-    color: red;
+    color: #fff;
 }
 .register{
     font-size: .9em;

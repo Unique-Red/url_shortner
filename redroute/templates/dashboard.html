@@ -1,19 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<section class="hero">
+<section class="hero" style="grid-template-columns: repeat(3, 1fr);padding: 100px 20px;">
     {% if current_user.is_authenticated %}
         {% if urls %}
-        <h1>{{ current_user.username|capitalize }}, Here are your URLS</h1>
             {% for url in urls %}
-            <div class="card" style="width: 18rem;">
+            <div class="card" style="width: 100%; border: 2px red solid; padding: 15px; border-radius: 5px;">
                 <img class="card-img-top" src="{{url_for('generate_qr_code_url', short_url=url.short_url)}}" alt="QR Code">
                 <div class="card-body">
                   <h5 class="card-title">Link Clicks: {{url.clicks}} <br>Created: {{ url.created_at.strftime('%B %d, %Y') }}</h5>
                   <p class="card-text">{{ url.long_url }}</p>
                   <p>Shortened Link: <br>
                     <a href="{{ url_for('redirect_url', short_url=url.short_url) }}" style="color: aliceblue; text-decoration: underline;" target="_blank">
-                    <input type="text" value="redroute.onrender.com/{{url.short_url}}" id="myInput" style="background: none; border: none; cursor: pointer; color: #fff; text-decoration: underline;" disabled>
+                    <input type="text" value="redroute.onrender.com/{{url.short_url}}" id="myInput" style="background: none; border: none; cursor: pointer; color: blue; text-decoration: underline;" disabled>
                     </a>
                     </p>
                   <button onclick="myFunction()">Copy Link</button>

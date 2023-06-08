@@ -8,7 +8,8 @@
     text-decoration: none;
 }
 body{
-    background: linear-gradient(245.59deg, red 0%, gray 100%);
+    /* background: linear-gradient(245.59deg, #fff 0%, gray 100%); */
+    background: #fff;
 }
 
 header{
@@ -37,7 +38,7 @@ header.fixed::before{
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(245.59deg, rgb(255 0 0 / 84%) 0%, rgba(128, 128, 128, 0.634) 100%);
+    background: linear-gradient(245.59deg, rgba(243, 234, 234, 0.84) 0%, rgb(234, 234, 234) 100%);
     filter: blur(4px);
     z-index: -1; 
 }
@@ -56,7 +57,7 @@ header.fixed::before{
 }
 
 .navlist a{
-    color: #fff;
+    color: red;
     font-size: 18px;
     font-weight: 500;
     padding: 8px 15px;
@@ -65,11 +66,11 @@ header.fixed::before{
 }
 
 .navlist a:hover{
-    border-bottom: 2px solid #fff;
+    border-bottom: 2px solid #000;
 }
 
 #menu-icon{
-    color: #fff;
+    color: red;
     font-size: 30px;
     display: none;
     z-index: 10001;
@@ -79,7 +80,7 @@ header.fixed::before{
 .hero{
     width: 100%;
     min-height: 100vh;
-    /* background: linear-gradient(245.59deg, red 0%, gray 100%); */
+    /* background: linear-gradient(245.59deg, #fff 0%, gray 100%); */
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
@@ -87,11 +88,11 @@ header.fixed::before{
 }
 
 section{
-    padding: 100px 9%;
+    padding: 100px 10%;
 }
 
 .hero-text{
-    color: #fff;
+    color: red;
     font-size: 15px;
     font-weight: 400;
     margin-bottom: 40px;
@@ -115,8 +116,8 @@ section{
 
 .hero-text h5{
     margin-bottom: 1rem;
-    color: red;
-    background: #fff;
+    color: #fff;
+    background: red;
     width: fit-content;
     padding: 10px;
     border-radius: 10px;
@@ -130,24 +131,24 @@ section{
 
 .hero-text a{
     display: inline-block;
-    color: #fff;
+    color: red;
     font-size: 15px;
     font-weight: 500;
     padding: 10px 20px;
-    border: 2px solid #fff;
+    border: 2px solid red;
     border-radius: 15px;
     transition: all 0.60s ease;
 }
 
 .hero-text a:hover{
-    background: #fff;
-    color: red;
+    background: red;
+    color: #fff;
     transform: translateX(10px);
 }
 
 .hero-text a.ctaa{
     background: transparent;
-    border: 1px solid #fff;
+    border: 1px solid red;
     margin-left: 20px;
 }
 
@@ -169,20 +170,20 @@ section{
     position: absolute;
     top: 50%;
     padding: 0 3%;
-    transform: translateY(-50%);
+    /* transform: translateY(-50%); */
 }
 
 .icons i{
     display: block;
     margin: 26px 0;
     font-size: 30px;
-    color: #fff;
+    color: red;
     transition: all .50s ease;
 }
 
 .icons i:hover{
     transform: translateY(-10px);
-    color: red;
+    color: #000;
 }
 
 .scroll-down{
@@ -196,14 +197,14 @@ section{
     padding: 12px;
     font-size: 30px;
     color: #fff;
-    background: rgb(70, 1, 1);
+    background: red;
     border-radius: 30px;
     transition: all .50s ease;
 }
 
 .scroll-down i:hover{
     transform: translateY(-10px);
-    background: rgb(2, 23, 87);
+    background: #000;
 }
 
 form{
@@ -241,7 +242,7 @@ form input, form button{
 }
 
 input:focus{
-    border-color: red;
+    border-color: #fff;
 }
 
 button{
@@ -259,7 +260,7 @@ table {
     border-collapse: collapse;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20%;
+    /* margin-top: 20%; */
   }
   
   th, td {
@@ -271,7 +272,7 @@ table {
     background-color: lightgray;
   }
   a{
-      color: #fff;
+      color: red;
   }
   .form-box{
       height: auto;
@@ -282,7 +283,7 @@ table {
   .history{
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(245.59deg, red 0%, gray 100%);
+    background: #fff;
     align-items: center;
     gap: 2rem;
 }
@@ -314,7 +315,7 @@ table {
     font-weight: 600;
     text-align: center;
     margin-bottom: 1rem;
-    color: #fff;
+    color: red;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
@@ -324,7 +325,7 @@ table {
     margin-bottom: 10px;
     display: flex;
     text-align: left;
-    color: #fff;
+    color: red;
 }
 .about h1{
     font-size: 2rem;
@@ -333,7 +334,7 @@ table {
     font-weight: 600;
     text-align: center;
     margin-bottom: 1rem;
-    color: #fff;
+    color: red;
     text-transform: uppercase;
     letter-spacing: 2px;
 
@@ -344,7 +345,7 @@ table {
     gap: 20px;
 }
 .about-card{
-    background: #fff;
+    background: red;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -357,7 +358,7 @@ table {
 }
 .about-card .card-icon{
     font-size: 30px;
-    color: red;
+    color: #fff;
     margin-bottom: 10px;
     display: grid;
     place-items: center;
@@ -368,11 +369,10 @@ table {
         position: fixed;
     }
     .hero{
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
     .hero-text{
         text-align: center;
-        padding-top: 70px;
     }
     .hero-text a{
         margin: 10px 20px;
@@ -399,20 +399,24 @@ table {
         right: -100%;
         width: 100%;
         height: 100vh;
-        background: linear-gradient(245.59deg, red 0%, #000 100%);
+        background: #fff;
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 50px 20px;
+        justify-content: space-around;
     }
     .navlist a{
-        color: #fff;
-        font-size: 30px;
+        color: red;
+        font-size: 20px;
         font-weight: 500;
         padding: 8px 15px;
         transition: all 0.3s ease;
         border-bottom: 2px solid transparent;
         margin: 20px 0;
+    }
+    .navlist a:hover{
+        border-bottom: 2px solid #fff;
     }
     .navlist.open{
         right: 0;
@@ -425,13 +429,10 @@ table {
     }
     header{
         padding: 0 3%;
-        background: #fff;
+        background: rgb(173, 126, 126);
     }
-    .navlist a{
-        color: #fff;
-    }
-    .navlist a:hover{
-        border-bottom: 2px solid #fff;
+    .history{
+        background: none;
     }
     #menu-icon{
         color: red;
@@ -439,4 +440,36 @@ table {
     .about-list{
         grid-template-columns: repeat(1, 1fr);
     }
+    form{
+        padding: 15px;
+    }
+    form input, form button{
+        padding: 5px 10px;
+        margin: 5px;
+    }
+    form input::placeholder{
+        font-size: 10px;
+    }
+    form input:focus{
+        border-color: red;
+    }
+
+    @media screen and (max-width: 500px){
+        
+    .hero{
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .hero-text{
+        text-align: center;
+    }
+    .hero-text a{
+        margin: 10px 20px;
+    }
+    .hero-text a.ctaa{
+        margin: 0;
+    }
+    .hero-img img{
+        padding: 0;
+    }
+}
 }
