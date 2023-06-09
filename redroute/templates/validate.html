@@ -9,5 +9,7 @@
             <label for="">OTP</label>
         </div>
         <button type="submit">Confirm</button>
+
+        Click <a href="{{url_for('resend', email=email)}}">here</a> to resend otp
     </form>
 {% endblock %}

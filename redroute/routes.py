@@ -21,6 +21,17 @@ def login():
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email.lower()).first()
+        if user.confirmed == False:
+            try:
+                flash('Please verify your email first.')
+                msg = Message("RedRoute Email Verification", sender="no-replySut@gmail.com", recipients=[email])
+                msg.html = render_template('otp.html', otp=str(otp), username=user.username)
+                mail.send(msg)
+            except Exception as e:
+                print(e)
+                flash ("Verification failed. Please try again.")
+                return redirect(url_for('signup'))
+            return redirect(url_for('validate', email=email.lower()))
         if user:
             if check_password_hash(user.password, password):
                 login_user(user)
@@ -97,7 +108,7 @@ def home():
             long_url = 'http://' + long_url
         else:
             short_url = shortuuid.uuid()[:6]
-        url = Url(long_url=long_url, short_url=short_url, custom_url=custom_url)
+        url = Url(long_url=long_url, short_url=short_url, custom_url=custom_url, user_id=current_user.id)
         db.session.add(url)
         db.session.commit()
         return redirect(url_for('dashboard'))
@@ -108,7 +119,8 @@ def home():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    urls = Url.query.order_by(Url.created_at.desc()).all()
+    urls = Url.query.filter_by(user_id=current_user.id).order_by(Url.created_at.desc()).all()
+
     return render_template('dashboard.html', urls=urls)
 
 @app.route("/about")
@@ -144,7 +156,7 @@ def url_analytics(short_url):
 @app.route('/history')
 @login_required
 def link_history():
-    urls = Url.query.order_by(Url.created_at.desc()).all()
+    urls = Url.query.filter_by(user_id=current_user.id).order_by(Url.created_at.desc()).all()
     return render_template('history.html', urls=urls)
 
 @app.route('/delete/<int:id>')
