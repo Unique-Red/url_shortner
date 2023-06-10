@@ -21,7 +21,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email.lower()).first()
-        if user.confirmed == False:
+        if user and user.confirmed == False:
             try:
                 flash('Please verify your email first.')
                 msg = Message("RedRoute Email Verification", sender="no-replySut@gmail.com", recipients=[email])
