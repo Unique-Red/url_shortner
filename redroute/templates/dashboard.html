@@ -12,7 +12,7 @@
                   <p class="card-text">{{ url.long_url }}</p>
                   <p>Shortened Link: <br>
                     <a href="{{ url_for('redirect_url', short_url=url.short_url) }}" style="color: aliceblue; text-decoration: underline;" target="_blank">
-                    <input type="text" value="redr.site/{{url.short_url}}" id="myInput" style="background: none; border: none; cursor: pointer; color: blue; text-decoration: underline;" disabled>
+                    <input type="text" value="{{host}}{{url.short_url}}" id="myInput" style="background: none; border: none; cursor: pointer; color: blue; text-decoration: underline;" disabled>
                     </a>
                     </p>
                   <button onclick="myFunction()">Copy Link</button>

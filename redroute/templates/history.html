@@ -16,7 +16,7 @@
 	<tbody>
 		{% for url in urls %}
 		<tr>
-		<td><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">https://redr.site/{{url.short_url}}</a></td>
+		<td><a href="{{ url_for('redirect_url', short_url=url.short_url) }}" target="_blank">{{host}}{{url.short_url}}</a></td>
 		<td>{{ url.long_url }}</td>
 		<td>{{ url.created_at.strftime('%I:%M%p %B %d, %Y') }}</td>
 		<td><a href="{{ url_for('edit_url', id=url.id) }}">Edit</a></td>

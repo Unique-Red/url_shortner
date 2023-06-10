@@ -121,8 +121,8 @@ def home():
 @cache.cached(timeout=50)
 def dashboard():
     urls = Url.query.filter_by(user_id=current_user.id).order_by(Url.created_at.desc()).all()
-
-    return render_template('dashboard.html', urls=urls)
+    host = request.host_url
+    return render_template('dashboard.html', urls=urls, host=host)
 
 @app.route("/about")
 def about():
@@ -160,7 +160,8 @@ def url_analytics(short_url):
 @cache.cached(timeout=50)
 def link_history():
     urls = Url.query.filter_by(user_id=current_user.id).order_by(Url.created_at.desc()).all()
-    return render_template('history.html', urls=urls)
+    host = request.host_url
+    return render_template('history.html', urls=urls, host=host)
 
 @app.route('/delete/<int:id>')
 @login_required
