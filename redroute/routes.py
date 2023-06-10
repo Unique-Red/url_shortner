@@ -8,7 +8,7 @@ from .models import User, Url
 import qrcode
 import io
 import shortuuid
-from . import app, db, mail
+from . import app, db, mail, cache
 
 
 otp = randint(100000,999999)
@@ -118,6 +118,7 @@ def home():
 
 @app.route("/dashboard")
 @login_required
+@cache.cached(timeout=50)
 def dashboard():
     urls = Url.query.filter_by(user_id=current_user.id).order_by(Url.created_at.desc()).all()
 
@@ -128,7 +129,7 @@ def about():
     return render_template('about.html')
 
 @app.route('/<short_url>')
-@login_required
+@cache.cached(timeout=50)
 def redirect_url(short_url):
     url = Url.query.filter_by(short_url=short_url).first()
     if url:
@@ -147,6 +148,7 @@ def generate_qr_code_url(short_url):
 
 @app.route('/analytics/<short_url>')
 @login_required
+@cache.cached(timeout=50)
 def url_analytics(short_url):
     url = Url.query.filter_by(short_url=short_url).first()
     if url:
@@ -155,6 +157,7 @@ def url_analytics(short_url):
 
 @app.route('/history')
 @login_required
+@cache.cached(timeout=50)
 def link_history():
     urls = Url.query.filter_by(user_id=current_user.id).order_by(Url.created_at.desc()).all()
     return render_template('history.html', urls=urls)
