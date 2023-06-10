@@ -8,6 +8,7 @@
             <input type="email" name="email" required>
             <label for="">Email</label>
         </div>
+        
         <div class="inputbox">
             <ion-icon name="lock-closed-outline"></ion-icon>
             <input type="password" name="password" required>
@@ -17,5 +18,9 @@
         <div class="register">
             <p>Don't have a account <a href="{{url_for('signup')}}">Sign Up</a></p>
         </div>
+        <div class="forget">
+            <p>Forgot Password? <a href="{{url_for('forgot_password')}}">Reset Password</a></p>
+        </div>
+        
     </form>
 {% endblock %}

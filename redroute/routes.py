@@ -235,7 +235,7 @@ def forgot_password():
         if user:
             try:
                 msg = Message('Reset Password', sender="noah13victor@gmail.com", recipients=[email])
-                msg.html = render_template('reset_password.html', email=email)
+                msg.body = f"To reset your password, click on the link below:\n" + request.host_url + "reset_password/" + email + "\n\nIf you did not request a password reset, please ignore this email."
                 mail.send(msg)
             except:
                 flash ("Reset password failed. Please try again.")

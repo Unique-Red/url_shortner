@@ -68,21 +68,33 @@ top: -5px;
     font-size: 1.2em;
     top: 20px;
 }
+.inputbox small{
+    color: #ff0004;
+    font-size: .8em;
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: .5s;
+}
+.inputbox small.active{
+    visibility: visible;
+    opacity: 1;
+}
+
 .forget{
-    margin: -15px 0 15px ;
+    margin: 10px 0 15px ;
     font-size: .9em;
-    color: #fff;
+    color: #000;
     display: flex;
     justify-content: space-between;  
 }
 .forget label input{
     margin-right: 3px;
 }
-.forget label a{
-    color: #fff;
-    text-decoration: none;
-}
-.forget label a:hover{
+.forget a{
+    color: #ff0004;
     text-decoration: underline;
 }
 button{
