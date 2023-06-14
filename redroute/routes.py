@@ -218,13 +218,13 @@ def resend(email):
     user = User.query.filter_by(email=email).first()
     if user:
         try:
-            msg = Message('Email Verification', sender="noah13victor@gmail.com", recipients=[email])
+            msg = Message('Email Verification', sender="admin@redr.site", recipients=[email])
             msg.html = render_template('otp.html', otp=str(otp))
             mail.send(msg)
         except:
             flash ("Verification failed. Please try again.")
             return redirect(url_for('signup'))
-        flash('OTP sent successfully. Please check your email.')
+        flash('OTP sent successfully. Please check your email, spam or other folders/categories.')
         return redirect(url_for('validate', email=email))
     return 'Email not found.'
 
@@ -233,15 +233,16 @@ def forgot_password():
     if request.method == 'POST':
         email = request.form['email']
         user = User.query.filter_by(email=email.lower()).first()
+        link = request.host_url + "reset_password/" + email
         if user:
             try:
-                msg = Message('Reset Password', sender="noah13victor@gmail.com", recipients=[email])
-                msg.body = f"To reset your password, click on the link below:\n" + request.host_url + "reset_password/" + email + "\n\nIf you did not request a password reset, please ignore this email."
+                msg = Message('Reset Password', sender="admin@redr.site", recipients=[email])
+                msg.html = render_template('reset_mail.html', link=link)
                 mail.send(msg)
             except:
                 flash ("Reset password failed. Please try again.")
                 return redirect(url_for('login'))
-            flash('Reset password link sent successfully. Please check your email.')
+            flash('Reset password link sent successfully. Please check your email, spam or other folders/categories.')
             return redirect(url_for('login'))
         flash('Email not found.')
         return redirect(url_for('forgot_password'))
