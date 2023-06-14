@@ -24,7 +24,7 @@ def login():
         if user and user.confirmed == False:
             try:
                 flash('Please verify your email first.')
-                msg = Message("RedRoute Email Verification", sender="no-replySut@gmail.com", recipients=[email])
+                msg = Message("RedRoute Email Verification", sender="admin@redr.site", recipients=[email])
                 msg.html = render_template('otp.html', otp=str(otp), username=user.username)
                 mail.send(msg)
             except Exception as e:
@@ -70,7 +70,7 @@ def signup():
             new_user = User(email=email.lower(), username=username, password=generate_password_hash(password, method='sha256'))
 
             try:
-                msg = Message("RedRoute Email Verification", sender="noreply@gmail.com", recipients=[email])
+                msg = Message("RedRoute Email Verification", sender="admin@redr.site", recipients=[email])
                 msg.html = render_template('otp.html', otp=str(otp), username=username)
                 mail.send(msg)
             except Exception as e:

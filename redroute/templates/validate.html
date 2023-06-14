@@ -1,15 +1,17 @@
 {% extends "auth.html" %}
 {% block title %}Email validation{% endblock %}
 {% block content %}
-    <form method="post">
-        <h2>Email validation</h2>
+    <form method="post" style="padding: 10px;">
+        <h2>Email Validation</h2>
         <div class="inputbox">
             <ion-icon name="pin-outline"></ion-icon>
             <input type="number" name="otp" required>
             <label for="">OTP</label>
         </div>
         <button type="submit">Confirm</button>
-
-        Click <a href="{{url_for('resend', email=email)}}">here</a> to resend otp
+        <div class="register">
+            Click <a href="{{url_for('resend', email=email)}}">here</a> to resend otp
+        </div>
+        
     </form>
 {% endblock %}
