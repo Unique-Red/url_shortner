@@ -23,7 +23,7 @@ def login():
         user = User.query.filter_by(email=email.lower()).first()
         if user and user.confirmed == False:
             try:
-                flash('Please verify your email first.')
+                flash('Please verify your email first. Check spam and other folders if not found in inbox.')
                 msg = Message("RedRoute Email Verification", sender="admin@redr.site", recipients=[email])
                 msg.html = render_template('otp.html', otp=str(otp), username=user.username)
                 mail.send(msg)
