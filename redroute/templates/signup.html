@@ -1,7 +1,7 @@
 {% extends "auth.html" %}
 {% block title %}Sign Up{% endblock %}
 {% block content %}
-    <form method="post">
+    <form method="post" style="padding: 10px;">
         <h2>Sign Up</h2>
         <div class="inputbox">
             <ion-icon name="person-outline"></ion-icon>
@@ -24,6 +24,13 @@
             <label for="">Confirm Password</label>
         </div>
         <button type="submit">Sign Up</button>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <small style="color: gray; display: flex; text-align: center;">{{message}}</small>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <div class="register">
             <p>Already have a account? <a href="{{url_for('login')}}">Login</a></p>
         </div>

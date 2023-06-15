@@ -9,13 +9,6 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/auth.css')}}">
 </head>
 <body>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <strong style="color:red; text-align: center;">{{ message }}</strong>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
     <section>
         <div class="form-box">
             <div class="form-value">

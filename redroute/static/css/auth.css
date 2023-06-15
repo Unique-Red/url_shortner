@@ -88,7 +88,7 @@ top: -5px;
     font-size: .9em;
     color: #000;
     display: flex;
-    justify-content: space-between;  
+    justify-content: center;
 }
 .forget label input{
     margin-right: 3px;

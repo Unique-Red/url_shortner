@@ -80,7 +80,7 @@ def signup():
 
             db.session.add(new_user)
             db.session.commit()
-            flash('Account created successfully. Please check your email for verification.')
+            flash('Account created successfully. Please check your mail inbox or spam for verification.')
             return redirect(url_for('validate', email=email.lower()))
     return render_template('signup.html')
 
@@ -224,7 +224,7 @@ def resend(email):
         except:
             flash ("Verification failed. Please try again.")
             return redirect(url_for('signup'))
-        flash('OTP sent successfully. Please check your email, spam or other folders/categories.')
+        flash('OTP sent successfully. Please check your mail inbox or spam.')
         return redirect(url_for('validate', email=email))
     return 'Email not found.'
 
@@ -242,7 +242,7 @@ def forgot_password():
             except:
                 flash ("Reset password failed. Please try again.")
                 return redirect(url_for('login'))
-            flash('Reset password link sent successfully. Please check your email, spam or other folders/categories.')
+            flash('Reset password link sent successfully. Please check your mail inbox or spam.')
             return redirect(url_for('login'))
         flash('Email not found.')
         return redirect(url_for('forgot_password'))
