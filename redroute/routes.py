@@ -202,7 +202,7 @@ def validate(email):
             if not otp:
                 flash('Please enter OTP.')
                 return redirect(url_for('validate', email=email))
-            if otp == str(otp):
+            if int(otp) == otp:
                 user.confirmed = True
                 db.session.commit()
                 flash('Email verified successfully.')
