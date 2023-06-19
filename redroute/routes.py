@@ -198,11 +198,11 @@ def validate(email):
     user = User.query.filter_by(email=email).first()
     if user:
         if request.method == 'POST':
-            otp = request.form['otp']
-            if not otp:
+            user_otp = request.form['otp']
+            if not user_otp:
                 flash('Please enter OTP.')
                 return redirect(url_for('validate', email=email))
-            if int(otp) == otp:
+            if int(user_otp) == otp:
                 user.confirmed = True
                 db.session.commit()
                 flash('Email verified successfully.')
