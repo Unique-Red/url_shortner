@@ -90,6 +90,15 @@ span{
     align-items: center;
     gap: 2rem;
 }
+.hero-dashboard{
+    width: 100%;
+    min-height: 100vh;
+    /* background: linear-gradient(245.59deg, #fff 0%, gray 100%); */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    gap: 2rem;
+}
 
 section{
     padding: 100px 10%;
@@ -372,7 +381,7 @@ table {
     header{
         position: fixed;
     }
-    .hero{
+    .hero, .hero-dashboard{
         grid-template-columns: repeat(2, 1fr);
     }
     .hero-text{
@@ -468,7 +477,7 @@ table {
 
     @media screen and (max-width: 500px){
         
-    .hero{
+    .hero, .hero-dashboard{
         grid-template-columns: repeat(1, 1fr);
     }
     .hero-text{
