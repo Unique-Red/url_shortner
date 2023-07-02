@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Stats{% endblock %}
+{% block content %}
+<table>
+    <tr>
+        <th>Number of Users</th>
+        <th>Number of URLs</th>
+        <th>Number of Clicks</th>
+    </tr>
+    <tr>
+        <td>{{users}}</td>
+        <td>{{links}}</td>
+        <td>{{clicks}}</td>
+    </tr>
+</table>
+{% endblock %}

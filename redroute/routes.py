@@ -9,6 +9,7 @@ import qrcode
 import io
 import shortuuid
 from . import app, db, mail, cache
+from sqlalchemy import func
 
 
 otp = randint(100000,999999)
@@ -265,3 +266,12 @@ def reset_password(email):
                 return redirect(url_for('reset_password', email=email))
         return render_template('reset_password.html', email=email)
     return 'Email not found.'
+
+#Check number of users and links created
+@app.route('/stats')
+def stats():
+    users = User.query.count()
+    links = Url.query.count()
+    clicks = Url.query.with_entities(func.sum(Url.clicks)).scalar()
+
+    return render_template('stats.html', users=users, links=links, clicks=clicks)
