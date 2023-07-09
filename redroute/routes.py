@@ -8,7 +8,7 @@ from .models import User, Url
 import qrcode
 import io
 import shortuuid
-from . import app, db, mail, cache
+from . import app, db, mail, cache, limiter
 from sqlalchemy import func
 
 
@@ -95,6 +95,7 @@ def generate_qr_code(url):
 
 
 @app.route('/', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")
 def home():
     if request.method == 'POST':
         long_url = request.form['long_url']

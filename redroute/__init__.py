@@ -4,11 +4,16 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_share import Share
 from flask_caching import Cache
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 app = Flask(__name__)
+limiter = Limiter(get_remote_address)
+
+
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
