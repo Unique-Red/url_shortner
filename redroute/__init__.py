@@ -2,7 +2,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_mail import Mail
-from flask_share import Share
 from flask_caching import Cache
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -15,8 +14,8 @@ limiter = Limiter(get_remote_address)
 
 
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY')
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
@@ -31,7 +30,6 @@ app.config['CACHE_DEFAULT_TIMEOUT'] = 300
 
 db = SQLAlchemy(app)
 mail = Mail(app)
-share = Share(app)
 cache = Cache(app)
 
 
