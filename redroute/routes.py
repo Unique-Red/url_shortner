@@ -24,7 +24,7 @@ def login():
         if user and user.confirmed == False:
             try:
                 flash('Please verify your email first. Check spam and other folders if not found in inbox.')
-                msg = Message("RedRoute Email Verification", sender="admin@redr.site", recipients=[email])
+                msg = Message("RedRoute Email Verification", sender="RedRoute <admin@redr.site>", recipients=[email])
                 msg.html = render_template('otp.html', otp=str(otp), username=user.username)
                 mail.send(msg)
             except Exception as e:
@@ -70,7 +70,7 @@ def signup():
             new_user = User(email=email.lower(), username=username, password=generate_password_hash(password, method='sha256'))
 
             try:
-                msg = Message("RedRoute Email Verification", sender="admin@redr.site", recipients=[email])
+                msg = Message("RedRoute Email Verification", sender="RedRoute <admin@redr.site>", recipients=[email])
                 msg.html = render_template('otp.html', otp=str(otp), username=username)
                 mail.send(msg)
             except Exception as e:
@@ -219,7 +219,7 @@ def resend(email):
     user = User.query.filter_by(email=email).first()
     if user:
         try:
-            msg = Message('Email Verification', sender="admin@redr.site", recipients=[email])
+            msg = Message('Email Verification', sender="RedRoute <admin@redr.site>", recipients=[email])
             msg.html = render_template('otp.html', otp=str(otp))
             mail.send(msg)
         except:
@@ -237,7 +237,7 @@ def forgot_password():
         link = request.host_url + "reset_password/" + email
         if user:
             try:
-                msg = Message('Reset Password', sender="admin@redr.site", recipients=[email])
+                msg = Message('Reset Password', sender="RedRoute <admin@redr.site>", recipients=[email])
                 msg.html = render_template('reset_mail.html', link=link)
                 mail.send(msg)
             except:
