@@ -34,7 +34,6 @@ pluggy==1.2.0
 psycopg2==2.9.6
 Pygments==2.15.1
 pypng==0.20220715.0
-pyshortner==0.0.4
 python-dotenv==0.21.1
 qrcode==7.4.2
 redis==4.5.5
